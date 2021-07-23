@@ -1,14 +1,10 @@
 defmodule Rockelivery.Users.Delete do
-  alias Ecto.UUID
   alias Rockelivery.{Error, Repo, User}
 
   def call(id) do
-    with {:ok, _uuid} <- UUID.cast(id),
-         %User{} = user <- Repo.get(User, id) do
-      Repo.delete(user)
-    else
-      :error -> {:error, Error.build_id_format_error()}
+    case Repo.get(User, id) do
       nil -> {:error, Error.build_user_not_found_error(id)}
+      user -> Repo.delete(user)
     end
   end
 end
