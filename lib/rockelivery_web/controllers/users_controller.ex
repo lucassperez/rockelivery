@@ -23,7 +23,7 @@ defmodule RockeliveryWeb.UsersController do
   end
 
   def delete(conn, %{"id" => id}) do
-    with {:ok, %User{} = user} <- Rockelivery.delete(params) do
+    with {:ok, %User{}} <- Rockelivery.delete_user(id) do
       conn
       |> put_status(:no_content)
       |> text("")
