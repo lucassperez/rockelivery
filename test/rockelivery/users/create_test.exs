@@ -44,9 +44,12 @@ defmodule Rockelivery.Users.CreateTest do
         password: "123"
       }
 
-      {:error, %Error{status: status, result: changeset}} = Create.call(params)
+      result = Create.call(params)
+      {:error, %Error{result: changeset}} = result
+      search_result = Rockelivery.Repo.all(User)
 
-      assert status == :bad_request
+      assert search_result == []
+      assert {:error, %Error{status: :bad_request}} = result
       assert errors_on(changeset) == %{
         age: ["must be greater than or equal to 18"],
         cep: ["is invalid"],

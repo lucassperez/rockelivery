@@ -65,16 +65,17 @@ defmodule Rockelivery.Users.UpdateTest do
       }
 
       result = Update.call(params)
-      {:error, changeset} = result
+      {:error, %Error{result: result_changeset}} = result
       updated_user =
         Rockelivery.Repo.get(User, id)
         |> Map.put(:password, user.password)
 
-      assert {:error, %Changeset{}} = result
-      assert errors_on(changeset) == %{
+      assert user == updated_user
+      assert {:error, %Error{status: :bad_request}} = result
+      assert errors_on(result_changeset) == %{
         cep: ["has invalid format"],
         cpf: ["has invalid format"],
-        email: ["has invalid format"],
+        email: ["has invalid format"]
       }
       assert user == updated_user
     end
