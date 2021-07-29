@@ -12,6 +12,8 @@ defmodule RockeliveryWeb.Router do
     pipe_through :api
 
     resources "/users", UsersController, only: ~w[show create update delete]a
+
+    post "/items", ItemsController, :create
   end
 
   # Enables LiveDashboard only for development
