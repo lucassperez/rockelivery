@@ -9,7 +9,7 @@ defmodule Rockelivery.Order do
 
   @required_params ~w[address payment_method user_id]a
 
-  @derive {Jason.Encoder, only: @required_params ++ [:id]}
+  @derive {Jason.Encoder, only: @required_params ++ ~w[id comments items]a}
 
   schema "orders" do
     field :address, :string
@@ -24,7 +24,7 @@ defmodule Rockelivery.Order do
 
   def changeset(params, items) do
     %__MODULE__{}
-    |> cast(params, @required_params)
+    |> cast(params, @required_params ++ [:comments])
     |> validate_required(@required_params)
     |> put_assoc(:items, items)
   end
