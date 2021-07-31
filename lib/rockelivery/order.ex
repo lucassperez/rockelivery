@@ -5,8 +5,9 @@ defmodule Rockelivery.Order do
   alias Rockelivery.{Item, User}
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
 
-  @required_params ~w[address comments payment_method user_id]a
+  @required_params ~w[address payment_method user_id]a
 
   @derive {Jason.Encoder, only: @required_params ++ [:id]}
 
