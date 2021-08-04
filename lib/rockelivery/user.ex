@@ -26,6 +26,8 @@ defmodule Rockelivery.User do
     timestamps()
   end
 
+  def build(changeset), do: apply_action(changeset, :create)
+
   def changeset(params) do
     %__MODULE__{}
     |> changes(params, @required_params)
@@ -41,9 +43,9 @@ defmodule Rockelivery.User do
     |> cast(params, fields)
     |> validate_required(fields)
     |> validate_length(:password, min: 6)
-    |> validate_format(:cep, ~r/\d{5}[\.\-]?\d{3}/)
-    |> validate_format(:cpf, ~r/\d{3}\.?\d{3}\.?\d{3}\.?\d{2}/)
-    |> validate_format(:email, ~r/.+@.+\.com/)
+    |> validate_format(:cep, ~r/^\d{5}[\.\-]?\d{3}$/)
+    |> validate_format(:cpf, ~r/^\d{3}\.?\d{3}\.?\d{3}\.?\d{2}$/)
+    |> validate_format(:email, ~r/^.+@.+\.com$/)
     |> validate_number(:age, greater_than_or_equal_to: 18)
     |> unique_constraint([:email])
     |> unique_constraint([:cpf])
