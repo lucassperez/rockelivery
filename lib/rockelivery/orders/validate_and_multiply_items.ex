@@ -5,13 +5,13 @@ defmodule Rockelivery.Orders.ValidateAndMultiplyItems do
     items_ids
     |> Enum.map(fn id -> {id, Map.get(items_map, id)} end)
     |> Enum.any?(fn {_id, value} -> is_nil(value) end)
-    |> fn items_invalid? ->
-      if items_invalid? do
-        {:error, "Invalid item id"}
-      else
-        {:ok, items_map}
-      end
-    end.()
+    |> (fn items_invalid? ->
+          if items_invalid? do
+            {:error, "Invalid item id"}
+          else
+            {:ok, items_map}
+          end
+        end).()
     |> multiply_items_if_valid(items_params)
   end
 

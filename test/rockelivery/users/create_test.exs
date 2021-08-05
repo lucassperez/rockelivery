@@ -1,9 +1,12 @@
 defmodule Rockelivery.Users.CreateTest do
   use Rockelivery.DataCase, async: true
 
-  alias Rockelivery.Error
-  alias Rockelivery.User
+  import Mox
+
+  alias Rockelivery.{Error, User}
   alias Rockelivery.Users.Create
+  alias Rockelivery.Users.Create
+  alias Rockelivery.ViaCep.ClientMock
 
   describe "call/1" do
     test "when all params are valid, it returns the user" do
@@ -16,6 +19,24 @@ defmodule Rockelivery.Users.CreateTest do
         name: "Lucas",
         password: "123456"
       }
+
+      expect(ClientMock, :get_cep_info, fn _cep ->
+        {
+          :ok,
+          %{
+            "bairro" => "Sé",
+            "cep" => "01001-000",
+            "complemento" => "lado ímpar",
+            "ddd" => "11",
+            "gia" => "1004",
+            "ibge" => "3550308",
+            "localidade" => "São Paulo",
+            "logradouro" => "Praça da Sé",
+            "siafi" => "7107",
+            "uf" => "SP"
+          }
+        }
+      end)
 
       response = Create.call(params)
 
@@ -50,6 +71,7 @@ defmodule Rockelivery.Users.CreateTest do
 
       assert search_result == []
       assert {:error, %Error{status: :bad_request}} = result
+
       assert errors_on(changeset) == %{
         age: ["must be greater than or equal to 18"],
         cep: ["is invalid"],

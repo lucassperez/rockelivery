@@ -45,19 +45,21 @@ defmodule Rockelivery.User do
     |> validate_length(:password, min: 6)
     |> validate_format(:cep, ~r/^\d{5}[\.\-]?\d{3}$/)
     |> validate_format(:cpf, ~r/^\d{3}\.?\d{3}\.?\d{3}\.?\d{2}$/)
-    |> validate_format(:email, ~r/^.+@.+\.com$/)
+    |> validate_format(:email, ~r/^.+@.+\.com(\.\w+)?$/)
     |> validate_number(:age, greater_than_or_equal_to: 18)
     |> unique_constraint([:email])
     |> unique_constraint([:cpf])
     |> put_password_hash()
   end
 
-  defp put_password_hash(%Ecto.Changeset{
-    valid?: true,
-    changes: %{
-      password: password
-    }
-  } = changeset) do
+  defp put_password_hash(
+         %Ecto.Changeset{
+           valid?: true,
+           changes: %{
+             password: password
+           }
+         } = changeset
+       ) do
     change(changeset, Pbkdf2.add_hash(password))
   end
 

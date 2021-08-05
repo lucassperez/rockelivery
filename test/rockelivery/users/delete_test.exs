@@ -15,6 +15,7 @@ defmodule Rockelivery.Users.DeleteTest do
       result = Delete.call(id)
 
       assert Rockelivery.Repo.get(User, id) == nil
+
       assert {
         :ok,
         %User{

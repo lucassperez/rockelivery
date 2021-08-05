@@ -7,8 +7,7 @@ defmodule Rockelivery.Orders.Create do
   def call(params) do
     with {:ok, %User{}} <- UserGet.by_id(params["user_id"]),
          {:ok, items_list} <- fetch_items(params),
-         {:ok, %Order{} = order} <- handle_items(items_list, params)
-    do
+         {:ok, %Order{} = order} <- handle_items(items_list, params) do
       {:ok, order}
     else
       {:error, %Error{} = error} -> {:error, error}

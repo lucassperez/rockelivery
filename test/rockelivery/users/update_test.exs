@@ -11,6 +11,7 @@ defmodule Rockelivery.Users.UpdateTest do
     test "when the user exists and all params are valid, it updates the user" do
       id = Ecto.UUID.generate()
       insert(:user, id: id)
+
       params = %{
         "address" => "Rua Mais Legal, 456",
         "age" => 24,
@@ -25,6 +26,7 @@ defmodule Rockelivery.Users.UpdateTest do
       updated_user = Rockelivery.Repo.get(User, id)
 
       assert {:ok, %User{}} = result
+
       assert %User{
         address: "Rua Mais Legal, 456",
         age: 24,
@@ -57,6 +59,7 @@ defmodule Rockelivery.Users.UpdateTest do
     """ do
       id = Ecto.UUID.generate()
       user = insert(:user, id: id)
+
       params = %{
         "cep" => "98",
         "cpf" => "98",
@@ -66,17 +69,20 @@ defmodule Rockelivery.Users.UpdateTest do
 
       result = Update.call(params)
       {:error, %Error{result: result_changeset}} = result
+
       updated_user =
         Rockelivery.Repo.get(User, id)
         |> Map.put(:password, user.password)
 
       assert user == updated_user
       assert {:error, %Error{status: :bad_request}} = result
+
       assert errors_on(result_changeset) == %{
         cep: ["has invalid format"],
         cpf: ["has invalid format"],
         email: ["has invalid format"]
       }
+
       assert user == updated_user
     end
   end

@@ -30,6 +30,7 @@ defmodule Rockelivery.ViaCep.ClientTest do
         }
       ]
       url = endpoint_url(bypass.port)
+
       Bypass.expect(bypass, "GET", "#{cep}/json/", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -58,6 +59,7 @@ defmodule Rockelivery.ViaCep.ClientTest do
     test "when cep is invalid, it returns an error", %{bypass: bypass} do
       cep = "123"
       url = endpoint_url(bypass.port)
+
       Bypass.expect(bypass, "GET", "#{cep}/json/", fn conn ->
         Plug.Conn.resp(conn, 400, "")
       end)
@@ -77,6 +79,7 @@ defmodule Rockelivery.ViaCep.ClientTest do
       cep = "12345-678"
       body = ~s[{"erro": true}]
       url = endpoint_url(bypass.port)
+
       Bypass.expect(bypass, "GET", "#{cep}/json/", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -111,4 +114,3 @@ defmodule Rockelivery.ViaCep.ClientTest do
     end
   end
 end
-

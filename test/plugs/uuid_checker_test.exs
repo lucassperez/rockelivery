@@ -34,10 +34,12 @@ defmodule RockeliveryWeb.Plugs.UUIDCheckerTest do
 
     assert conn.halted
     assert conn.status == 400
+
     assert Enum.member?(
       conn.resp_headers,
       {"content-type", "application/json; charset=utf-8"}
     )
+
     assert conn.resp_body == "{\"message\":\"Invalid ID format\"}"
     assert conn.state == :sent
   end

@@ -1,9 +1,11 @@
 defmodule RockeliveryWeb.UsersControllerTest do
   use RockeliveryWeb.ConnCase, async: true
 
-  alias Rockelivery.User
-
+  import Mox
   import Rockelivery.Factory
+
+  alias Rockelivery.User
+  alias Rockelivery.ViaCep.ClientMock
 
   setup do
     params = %{
@@ -114,9 +116,11 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   describe "update/2" do
     test """
-    when the user exists and all params are valid, it updates the user
-    """, %{conn: conn} do
+         when the user exists and all params are valid, it updates the user
+    """,
+    %{conn: conn} do
       %{id: id, cpf: cpf, email: email} = insert(:user)
+
       params = %{
         "id" => id,
         "name" => "Juliana"
@@ -126,9 +130,11 @@ defmodule RockeliveryWeb.UsersControllerTest do
         conn
         |> patch(Routes.users_path(conn, :update, id, params))
         |> json_response(:ok)
+
       updated_user = Rockelivery.get_user_by_id(id)
 
       assert {:ok, %User{name: "Juliana"}} = updated_user
+
       assert %{
         "user" => %{
           "name" => "Juliana",
@@ -140,48 +146,52 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test """
-    when the user exists but there are invalid params, it shows an error
-    """, %{conn: conn} do
-      id = Ecto.UUID.generate()
-      insert(:user, id: id)
-      params = %{
-        "id" => id,
-        "cpf" => "123",
-        "cep" => "456",
-        "email" => "email@inválido.com.br"
-      }
+         when the user exists but there are invalid params, it shows an error
+         """,
+         %{conn: conn} do
+           id = Ecto.UUID.generate()
+           insert(:user, id: id)
 
-      response =
-        conn
-        |> patch(Routes.users_path(conn, :update, id, params))
-        |> json_response(:bad_request)
+           params = %{
+             "id" => id,
+             "cpf" => "123",
+             "cep" => "456",
+             "email" => "email@inválido.com.br"
+           }
 
-      assert response == %{
-        "message" => %{
-          "cep" => ["has invalid format"],
-          "cpf" => ["has invalid format"]
-        }
-      }
-    end
+           response =
+             conn
+             |> patch(Routes.users_path(conn, :update, id, params))
+             |> json_response(:bad_request)
 
-    test """
-    when the user does not exists, it shows an error
-    """, %{conn: conn, params: params} do
-      id = Ecto.UUID.generate()
+           assert response == %{
+             "message" => %{
+               "cep" => ["has invalid format"],
+               "cpf" => ["has invalid format"]
+             }
+           }
+         end
 
-      response =
-        conn
-        |> patch(Routes.users_path(conn, :update, id, params))
-        |> json_response(:not_found)
+         test """
+         when the user does not exists, it shows an error
+         """,
+         %{conn: conn, params: params} do
+           id = Ecto.UUID.generate()
 
-      assert response == %{"message" => "User not found: [#{id}]"}
-    end
+           response =
+             conn
+             |> patch(Routes.users_path(conn, :update, id, params))
+             |> json_response(:not_found)
+
+           assert response == %{"message" => "User not found: [#{id}]"}
+         end
   end
 
   describe "delete/2" do
     test """
-    when there is a user with the given id, it deletes the user
-    """, %{conn: conn} do
+         when there is a user with the given id, it deletes the user
+    """,
+    %{conn: conn} do
       %{id: id} = insert(:user)
 
       response =
@@ -193,8 +203,9 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test """
-    when there is no user with the given id, it shows an error
-    """, %{conn: conn} do
+         when there is no user with the given id, it shows an error
+    """,
+    %{conn: conn} do
       id = Ecto.UUID.generate()
 
       response =
