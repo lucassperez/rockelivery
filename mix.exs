@@ -41,22 +41,28 @@ defmodule Rockelivery.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.8"},
-      {:phoenix_ecto, "~> 4.1"},
+
       {:ecto_sql, "~> 3.4"},
-      {:postgrex, ">= 0.0.0"},
+      {:gettext, "~> 0.11"},
+      {:guardian, "~> 2.0"},
+      {:hackney, "~> 1.17"},
+      {:jason, "~> 1.0"},
+      {:pbkdf2_elixir, "~> 1.4"},
+      {:phoenix_ecto, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.4"},
+      {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:pbkdf2_elixir, "~> 1.4"},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:ex_machina, "~> 2.7.0", only: :test},
       {:tesla, "~> 1.4"},
-      {:hackney, "~> 1.17"},
+
+      # Dev e Test
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+
+      # Test
       {:bypass, "~> 2.1", only: :test},
+      {:ex_machina, "~> 2.7.0", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
       {:mox, "~> 1.0", only: :test}
     ]
   end
