@@ -13,6 +13,8 @@ defmodule RockeliveryWeb.Router do
 
     resources "/users", UsersController, only: ~w[show create update delete]a
 
+    post "/users/sign-in", UsersController, :sign_in
+
     post "/items", ItemsController, :create
 
     post "/orders", OrdersController, :create

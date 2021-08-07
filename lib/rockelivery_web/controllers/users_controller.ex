@@ -2,15 +2,24 @@ defmodule RockeliveryWeb.UsersController do
   use RockeliveryWeb, :controller
 
   alias Rockelivery.User
-  alias RockeliveryWeb.FallbackController
+  alias RockeliveryWeb.{Auth.Guardian, FallbackController}
 
   action_fallback FallbackController
 
-  def show(conn, %{"id" => id}) do
-    with {:ok, %User{} = user} <- Rockelivery.get_user_by_id(id) do
+  def sign_in(conn, params) do
+    with {:ok, token} <- Guardian.authenticate(params) do
       conn
       |> put_status(:ok)
-      |> render("user.json", user: user)
+      |> render("sign_in.json", token: token)
+    end
+  end
+
+  def show(conn, %{"id" => id}) do
+    with {:ok, %User{} = user} <- Rockelivery.get_user_by_id(id),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+      conn
+      |> put_status(:ok)
+      |> render("user.json", token: token, user: user)
     end
   end
 
