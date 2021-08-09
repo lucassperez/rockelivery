@@ -8,12 +8,22 @@ defmodule RockeliveryWeb.Router do
     plug UUIDChecker
   end
 
+  pipeline :auth do
+    plug RockeliveryWeb.Auth.Pipeline
+  end
+
   scope "/api", RockeliveryWeb do
     pipe_through :api
 
-    resources "/users", UsersController, only: ~w[show create update delete]a
+    post "/users", UsersController, :create
 
     post "/users/sign-in", UsersController, :sign_in
+  end
+
+  scope "/api", RockeliveryWeb do
+    pipe_through ~w[api auth]a
+
+    resources "/users", UsersController, only: ~w[show update delete]a
 
     post "/items", ItemsController, :create
 

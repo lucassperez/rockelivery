@@ -20,9 +20,8 @@ defmodule Rockelivery.UserTest do
 
   describe "changeset/1" do
     test """
-         when params are valid, it returns a valid changeset
-    """,
-    %{params: params} do
+    when params are valid, it returns a valid changeset
+    """, %{params: params} do
       response = User.changeset(params)
 
       assert %Changeset{
@@ -57,41 +56,39 @@ defmodule Rockelivery.UserTest do
     end
 
     test """
-         when params are invalid, it returns an invalid changeset
-         """,
-         %{params: params} do
-           params = %{
-             params
-             | age: 17,
-             cep: 123,
-             cpf: "1238901",
-             email: "teste@com",
-             password: "123"
-           }
+    when params are invalid, it returns an invalid changeset
+    """, %{params: params} do
+      params = %{
+        params
+        | age: 17,
+        cep: 123,
+        cpf: "1238901",
+        email: "teste@com",
+        password: "123"
+      }
 
-           response = User.changeset(params)
+      response = User.changeset(params)
 
-           assert %Changeset{
-             valid?: false,
-             errors: [
-               age: {"must be greater than or equal to " <> _number, _},
-               email: {"has invalid format", _},
-               cpf: {"has invalid format", _},
-               password: {
-                 "should be at least %{count} character(s)",
-                 [{:count, 6} | _]
-               },
-               cep: {"is invalid", _}
-             ]
-           } = response
-         end
+      assert %Changeset{
+        valid?: false,
+        errors: [
+          age: {"must be greater than or equal to " <> _number, _},
+          email: {"has invalid format", _},
+          cpf: {"has invalid format", _},
+          password: {
+            "should be at least %{count} character(s)",
+            [{:count, 6} | _]
+          },
+          cep: {"is invalid", _}
+        ]
+      } = response
+    end
   end
 
   describe "changeset/2" do
     test """
     when update params are valid, it returns a valid changeset
-    """,
-    %{params: params} do
+    """, %{params: params} do
       changeset = User.changeset(params)
 
       update_params = %{
@@ -120,8 +117,7 @@ defmodule Rockelivery.UserTest do
 
     test """
     when params are invalid, it returns an invalid changeset
-    """,
-    %{params: params} do
+    """, %{params: params} do
       params = %{
         params
         | age: 17,

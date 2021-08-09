@@ -6,8 +6,13 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   alias Rockelivery.User
   alias Rockelivery.ViaCep.ClientMock
+  alias RockeliveryWeb.Auth.Guardian
 
-  setup do
+  setup %{conn: conn} do
+    user = insert(:user, cpf: "09876543210", email: "testesetup@email.com")
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+    conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
     params = %{
       "address" => "Rua Legal, 123",
       "age" => 25,
@@ -18,7 +23,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
       "password" => "123456"
     }
 
-    {:ok, params: params}
+    {:ok, params: params, conn: conn}
   end
 
   describe "show/2" do
@@ -116,10 +121,9 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   describe "update/2" do
     test """
-         when the user exists and all params are valid, it updates the user
-    """,
-    %{conn: conn} do
-      %{id: id, cpf: cpf, email: email} = insert(:user)
+    when the user exists and all params are valid, it updates the user
+    """, %{conn: conn} do
+      %{id: id, cpf: cpf, email: email}  = insert(:user)
 
       params = %{
         "id" => id,
@@ -146,66 +150,62 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test """
-         when the user exists but there are invalid params, it shows an error
-         """,
-         %{conn: conn} do
-           id = Ecto.UUID.generate()
-           insert(:user, id: id)
+    when the user exists but there are invalid params, it shows an error
+    """, %{conn: conn} do
+      id = Ecto.UUID.generate()
+      insert(:user, id: id)
 
-           params = %{
-             "id" => id,
-             "cpf" => "123",
-             "cep" => "456",
-             "email" => "email@inválido.com.br"
-           }
+      params = %{
+        "id" => id,
+        "cpf" => "123",
+        "cep" => "456",
+        "email" => "email@inválido.com.br"
+      }
 
-           response =
-             conn
-             |> patch(Routes.users_path(conn, :update, id, params))
-             |> json_response(:bad_request)
+      response =
+        conn
+        |> patch(Routes.users_path(conn, :update, id, params))
+        |> json_response(:bad_request)
 
-           assert response == %{
-             "message" => %{
-               "cep" => ["has invalid format"],
-               "cpf" => ["has invalid format"]
-             }
-           }
-         end
+      assert response == %{
+        "message" => %{
+          "cep" => ["has invalid format"],
+          "cpf" => ["has invalid format"]
+        }
+      }
+    end
 
-         test """
-         when the user does not exists, it shows an error
-         """,
-         %{conn: conn, params: params} do
-           id = Ecto.UUID.generate()
+    test """
+    when the user does not exists, it shows an error
+    """, %{conn: conn, params: params} do
+      id = Ecto.UUID.generate()
 
-           response =
-             conn
-             |> patch(Routes.users_path(conn, :update, id, params))
-             |> json_response(:not_found)
+      response =
+        conn
+        |> patch(Routes.users_path(conn, :update, id, params))
+        |> json_response(:not_found)
 
-           assert response == %{"message" => "User not found: [#{id}]"}
-         end
+      assert response == %{"message" => "User not found: [#{id}]"}
+    end
   end
 
   describe "delete/2" do
     test """
-         when there is a user with the given id, it deletes the user
-    """,
-    %{conn: conn} do
-      %{id: id} = insert(:user)
+    when there is a user with the given id, it deletes the user
+    """, %{conn: conn} do
+      user = insert(:user)
 
       response =
         conn
-        |> delete(Routes.users_path(conn, :delete, id))
+        |> delete(Routes.users_path(conn, :delete, user.id))
         |> response(:no_content)
 
       assert response == ""
     end
 
     test """
-         when there is no user with the given id, it shows an error
-    """,
-    %{conn: conn} do
+    when there is no user with the given id, it shows an error
+    """, %{conn: conn} do
       id = Ecto.UUID.generate()
 
       response =

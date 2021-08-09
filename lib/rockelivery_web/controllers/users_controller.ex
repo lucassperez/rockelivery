@@ -15,19 +15,19 @@ defmodule RockeliveryWeb.UsersController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, %User{} = user} <- Rockelivery.get_user_by_id(id),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+    with {:ok, %User{} = user} <- Rockelivery.get_user_by_id(id) do
       conn
       |> put_status(:ok)
-      |> render("user.json", token: token, user: user)
+      |> render("user.json", user: user)
     end
   end
 
   def create(conn, params) do
-    with {:ok, %User{} = user} <- Rockelivery.create_user(params) do
+    with {:ok, %User{} = user} <- Rockelivery.create_user(params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> render("create.json", user: user)
+      |> render("create.json", token: token, user: user)
     end
   end
 
