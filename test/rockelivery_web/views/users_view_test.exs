@@ -19,7 +19,11 @@ defmodule RockeliveryWeb.UsersViewTest do
       token: ^token,
       user: %User{
         name: "Eu",
-        address: "Aqui"
+        address: "Aqui",
+        age: _,
+        cep: _,
+        cpf: _,
+        email: _
       }
     } = response
     assert Map.keys(response) == [:message, :token, :user]

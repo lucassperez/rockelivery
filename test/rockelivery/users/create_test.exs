@@ -5,7 +5,6 @@ defmodule Rockelivery.Users.CreateTest do
 
   alias Rockelivery.{Error, User}
   alias Rockelivery.Users.Create
-  alias Rockelivery.Users.Create
   alias Rockelivery.ViaCep.ClientMock
 
   describe "call/1" do
