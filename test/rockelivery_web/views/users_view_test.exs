@@ -5,8 +5,8 @@ defmodule RockeliveryWeb.UsersViewTest do
   import Rockelivery.Factory
 
   alias Rockelivery.User
-  alias RockeliveryWeb.UsersView
   alias RockeliveryWeb.Auth.Guardian
+  alias RockeliveryWeb.UsersView
 
   test "renders create.json" do
     user = insert(:user, name: "Eu", address: "Aqui")

@@ -11,7 +11,12 @@
           "lib/",
           "test/"
         ],
-        excluded: [~r"/_build/", ~r"/deps/", ~r"/lib/.*/(endpoint|telemetry|user_socket).ex"]
+        excluded: [
+          ~r"/_build/",
+          ~r"/deps/",
+          ~r"/lib/.*/(endpoint|telemetry|user_socket).ex",
+          ~r"/test/support/.*_case.ex"
+        ]
       },
       plugins: [],
       requires: [],
