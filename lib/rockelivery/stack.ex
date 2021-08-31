@@ -6,7 +6,7 @@ defmodule Rockelivery.Stack do
   def start_link(initial_stack) when is_list(initial_stack),
     do: GenServer.start_link(__MODULE__, initial_stack)
 
-  def start_link(initial_stack), do: {:error, "Initial value must be a List"}
+  def start_link(_initial_stack), do: {:error, "Initial value must be a List"}
 
   def push(pid, element), do: GenServer.call(pid, {:push, element})
   def pop(pid), do: GenServer.call(pid, :pop)
