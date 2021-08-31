@@ -32,7 +32,9 @@ defmodule RockeliveryWeb.Telemetry do
 
       # Database Metrics
       summary("rockelivery.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("rockelivery.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("rockelivery.repo.query.decode_time",
+        unit: {:native, :millisecond}
+      ),
       summary("rockelivery.repo.query.query_time", unit: {:native, :millisecond}),
       summary("rockelivery.repo.query.queue_time", unit: {:native, :millisecond}),
       summary("rockelivery.repo.query.idle_time", unit: {:native, :millisecond}),

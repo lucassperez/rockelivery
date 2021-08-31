@@ -17,7 +17,8 @@ defmodule Rockelivery.Stack do
     {:ok, stack}
   end
 
-  @impl true # síncrono
+  # Síncrono
+  @impl true
   def handle_call({:push, element}, _from, stack) do
     new_stack = [element | stack]
     {:reply, new_stack, new_stack}
@@ -38,7 +39,8 @@ defmodule Rockelivery.Stack do
     {:reply, stack, stack}
   end
 
-  @impl true # assíncrono
+  # Assíncrono
+  @impl true
   def handle_cast({:push, element}, stack) do
     {:noreply, [element | stack]}
   end

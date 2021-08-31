@@ -13,7 +13,7 @@ defmodule RockeliveryWeb.Auth.Guardian do
 
   def authenticate(%{"id" => user_id, "password" => password}) do
     with {:ok, ^user_id} <-
-            Ecto.UUID.cast(user_id),
+           Ecto.UUID.cast(user_id),
          {:ok, %User{password_hash: password_hash} = user} <-
            Rockelivery.get_user_by_id(user_id),
          true <-

@@ -42,6 +42,7 @@ defmodule Rockelivery.MixProject do
     [
       {:phoenix, "~> 1.5.8"},
 
+      # All environments
       {:ecto_sql, "~> 3.4"},
       {:gettext, "~> 0.11"},
       {:guardian, "~> 2.0"},

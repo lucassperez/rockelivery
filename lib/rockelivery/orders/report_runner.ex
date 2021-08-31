@@ -24,7 +24,8 @@ defmodule Rockelivery.Orders.ReportRunner do
     {:ok, state}
   end
 
-  @impl true # recebe qualquer tipo de mensagem
+  # Recebe qualquer tipo de mensagem
+  @impl true
   def handle_info(:generate, state) do
     Mix.env() == :prod && Logger.info("Generating report")
     Report.create()
