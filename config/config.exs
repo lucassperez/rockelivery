@@ -22,15 +22,20 @@ config :rockelivery, RockeliveryWeb.Auth.Guardian,
   issuer: "rockelivery",
   secret_key: "N0eQ7vSsdnhM3podSuuLW6ugGpbqMSOyMuOoczcGlttdMvPtX8YrNpOpNSr+dg9I"
 
-  config :rockelivery, RockeliveryWeb.Auth.Pipeline,
+config :rockelivery, RockeliveryWeb.Auth.Pipeline,
   module: RockeliveryWeb.Auth.Guardian,
   error_handler: RockeliveryWeb.Auth.ErrorHandler
 
 # Configures the endpoint
 config :rockelivery, RockeliveryWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "dwh9i4adMV/mYLJ8yjeEkCyQ2b+saRvE+vj9khuAyRoa+46dGh6UTLekVfoeNrFS",
-  render_errors: [view: RockeliveryWeb.ErrorView, accepts: ~w(json), layout: false],
+  secret_key_base:
+    "dwh9i4adMV/mYLJ8yjeEkCyQ2b+saRvE+vj9khuAyRoa+46dGh6UTLekVfoeNrFS",
+  render_errors: [
+    view: RockeliveryWeb.ErrorView,
+    accepts: ~w(json),
+    layout: false
+  ],
   pubsub_server: Rockelivery.PubSub,
   live_view: [signing_salt: "rkmU7at3"]
 

@@ -6,7 +6,7 @@ defmodule Rockelivery.Stack do
   def start_link(initial_stack) when is_list(initial_stack),
     do: GenServer.start_link(__MODULE__, initial_stack)
 
-  def start_link(initial_stack), do: {:error, "Initial value must be a List"}
+  def start_link(_initial_stack), do: {:error, "Initial value must be a List"}
 
   def push(pid, element), do: GenServer.call(pid, {:push, element})
   def pop(pid), do: GenServer.call(pid, :pop)
@@ -17,7 +17,8 @@ defmodule Rockelivery.Stack do
     {:ok, stack}
   end
 
-  @impl true # síncrono
+  # Síncrono
+  @impl true
   def handle_call({:push, element}, _from, stack) do
     new_stack = [element | stack]
     {:reply, new_stack, new_stack}
@@ -38,7 +39,8 @@ defmodule Rockelivery.Stack do
     {:reply, stack, stack}
   end
 
-  @impl true # assíncrono
+  # Assíncrono
+  @impl true
   def handle_cast({:push, element}, stack) do
     {:noreply, [element | stack]}
   end
