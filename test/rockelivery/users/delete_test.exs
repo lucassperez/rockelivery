@@ -35,6 +35,7 @@ defmodule Rockelivery.Users.DeleteTest do
 
       result = Delete.call(id)
 
+      assert 1 == 2
       assert result == {
         :error,
         %Error{
