@@ -14,7 +14,10 @@ database_url =
 config :rockelivery, Rockelivery.Repo,
   # ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  # pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  # Following the Gigalixir documentation, the pool size was set to 2
+  # https://gigalixir.readthedocs.io/en/latest/modify-app/releases.html#modifying-existing-app-with-elixir-releases
+  pool_size: 2
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -24,6 +27,7 @@ secret_key_base =
     """
 
 config :rockelivery, RockeliveryWeb.Endpoint,
+  server: true,
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
