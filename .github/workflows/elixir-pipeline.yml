@@ -58,7 +58,7 @@ jobs:
       run: mix test
 
   deploy:
-    needs: test
+    needs: build
     if: github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-18.04
