@@ -2,7 +2,7 @@ name: Elixir Pipeline
 
 env:
   ELIXIR_VERSION: 1.12.1
-  OTP_VERSION: 24
+  OTP_VERSION: 23.2
 
 on: [push, pull_request]
 
