@@ -69,7 +69,7 @@ jobs:
         with:
           python-version: 3.8.1
 
-      - uses: mhanberg/gigalixir-action@<current release>
+      - uses: mhanberg/gigalixir-action@v0.4.0
         with:
           GIGALIXIR_APP: rockelivery-app
           GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
